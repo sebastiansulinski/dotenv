@@ -88,10 +88,6 @@ class DotEnv
             case '(false)':
                 return false;
 
-            case 'empty':
-            case '(empty)':
-                return '';
-
             case 'null':
             case '(null)':
                 return null;
