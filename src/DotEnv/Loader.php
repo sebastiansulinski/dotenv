@@ -1,27 +1,30 @@
 <?php namespace SSD\DotEnv;
 
+use DirectoryIterator;
 use InvalidArgumentException;
 
 class Loader
 {
     /**
-     * @var array
+     * @var string|array
      */
-    private $files = [ ];
+    private $files;
+
     /**
      * @var bool
      */
     private $immutable = false;
+
     /**
      * @var array
      */
     private $lines = [ ];
 
     /**
-     * @param array $files
+     * @param string|array $files
      * @param bool|false $immutable
      */
-    public function __construct(array $files, $immutable = false)
+    public function __construct($files, $immutable = false)
     {
         $this->files = $files;
         $this->immutable = $immutable;
@@ -40,38 +43,21 @@ class Loader
     }
 
     /**
-     * Process collection of the given files.
+     * Process given file(s).
      *
      * @return void
      */
     private function getContent()
     {
-        foreach ($this->files as $file) {
+        foreach ( (array) $this->files as $item ) {
 
-            $this->validateFile($file);
+            if (is_file($item)) {
+                $this->readFileContent($item);
+            }
 
-            $this->readFileContent($file);
-
-        }
-    }
-
-    /**
-     * Determine if the file exists and is readable.
-     *
-     * @param string $file
-     * @throws InvalidArgumentException
-     * @return void
-     */
-    private function validateFile($file)
-    {
-        if ( ! is_file($file) || ! is_readable($file)) {
-
-            throw new InvalidArgumentException(
-                sprintf(
-                    'File "%s" cannot be found / cannot be read.',
-                    $file
-                )
-            );
+            if (is_dir($item)) {
+                $this->readDirectoryContent($item);
+            }
 
         }
     }
@@ -91,6 +77,41 @@ class Loader
         ini_set('auto_detect_line_endings', $autodetect);
 
         $this->lines = array_merge($this->lines, $lines);
+    }
+
+    /**
+     * Read content of a directory
+     * and add each qualifying file's
+     * content lines to the collection.
+     *
+     * @param string $directory
+     * @return void
+     */
+    private function readDirectoryContent($directory)
+    {
+        $items = new DirectoryIterator($directory);
+
+        foreach($items as $item) {
+
+            if ($item->isFile() && $this->isFile($item->getFilename())) {
+
+                $this->readFileContent($item->getPathname());
+
+            }
+
+        }
+    }
+
+    /**
+     * Check if the given file name
+     * qualifies as the environment file.
+     *
+     * @param $name
+     * @return bool
+     */
+    private function isFile($name)
+    {
+        return substr($name, 0, 4) === '.env';
     }
 
     /**
@@ -315,7 +336,7 @@ class Loader
         $loader = $this;
 
         return preg_replace_callback(
-            '/\${([a-zA-Z0-9_]+)}/',
+            '/^\$([a-zA-Z0-9_]+)/',
             function ($matchedPatterns) use ($loader) {
                 $nestedVariable = $loader->getVariable($matchedPatterns[1]);
                 if (is_null($nestedVariable)) {
@@ -348,7 +369,6 @@ class Loader
                 return $_SERVER[$name];
             default:
                 $value = getenv($name);
-
                 return $value === false ? null : $value;
         }
     }
