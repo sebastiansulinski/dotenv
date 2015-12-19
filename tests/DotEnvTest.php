@@ -90,10 +90,40 @@ class DotEnvTest extends BaseCase
     {
         $dotenv = new DotEnv([
             $this->pathname('.env'),
-            $this->pathname('overwrite' . DIRECTORY_SEPARATOR . '.env')
+            $this->overwrite_pathname('.env')
         ]);
         $dotenv->overload();
 
         $this->assertEquals(DotEnv::get('ENVIRONMENT'), 'production');
+    }
+
+    /**
+     * @test
+     */
+    public function strips_double_quotes_from_beginning_and_end()
+    {
+        $dotenv = new DotEnv([
+            $this->quotes_pathname('.env')
+        ]);
+        $dotenv->overload();
+
+        $this->assertEquals(DotEnv::get('DOUBLE_QUOTE_BOTH'), '$somestring');
+        $this->assertEquals(DotEnv::get('DOUBLE_QUOTE_LEFT'), '"$somestring');
+        $this->assertEquals(DotEnv::get('DOUBLE_QUOTE_RIGHT'), '$somestring"');
+    }
+
+    /**
+     * @test
+     */
+    public function strips_single_quotes_from_beginning_and_end()
+    {
+        $dotenv = new DotEnv([
+            $this->quotes_pathname('.env')
+        ]);
+        $dotenv->overload();
+
+        $this->assertEquals(DotEnv::get('SINGLE_QUOTE_BOTH'), '$asdflkj%&*');
+        $this->assertEquals(DotEnv::get('SINGLE_QUOTE_LEFT'), "'\$asdflkj%&*");
+        $this->assertEquals(DotEnv::get('SINGLE_QUOTE_RIGHT'), "\$asdflkj%&*'");
     }
 }
