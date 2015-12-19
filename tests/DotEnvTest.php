@@ -144,6 +144,23 @@ class DotEnvTest extends BaseCase
 
     /**
      * @test
+     *
+     * @expectedException RuntimeException
+     */
+    public function required_method_throws_exception_without_array_of_valid_variables()
+    {
+        $dotenv = new DotEnv([
+            $this->quotes_pathname('.env')
+        ]);
+        $dotenv->load();
+        $dotenv->required([
+            'EMPTY_VARIABLE',
+            'ANOTHER_EMPTY_VARIABLE'
+        ]);
+    }
+
+    /**
+     * @test
      */
     public function returns_boolean_null_and_empty()
     {
