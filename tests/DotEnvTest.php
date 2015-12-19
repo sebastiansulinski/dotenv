@@ -1,6 +1,7 @@
 <?php namespace SSDTest;
 
 use PHPUnit_Framework_Error;
+use RuntimeException;
 
 use SSD\DotEnv\DotEnv;
 
@@ -125,5 +126,35 @@ class DotEnvTest extends BaseCase
         $this->assertEquals(DotEnv::get('SINGLE_QUOTE_BOTH'), '$asdflkj%&*');
         $this->assertEquals(DotEnv::get('SINGLE_QUOTE_LEFT'), "'\$asdflkj%&*");
         $this->assertEquals(DotEnv::get('SINGLE_QUOTE_RIGHT'), "\$asdflkj%&*'");
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException RuntimeException
+     */
+    public function required_method_throws_exception_without_single_valid_variable()
+    {
+        $dotenv = new DotEnv([
+            $this->quotes_pathname('.env')
+        ]);
+        $dotenv->load();
+        $dotenv->required('EMPTY_VARIABLE');
+    }
+
+    /**
+     * @test
+     */
+    public function returns_boolean_null_and_empty()
+    {
+        $dotenv = new DotEnv([
+            $this->pathname('.env.bool_null')
+        ]);
+        $dotenv->load();
+
+        $this->assertTrue(DotEnv::get('VARIABLE_BOOL_TRUE'));
+        $this->assertFalse(DotEnv::get('VARIABLE_BOOL_FALSE'));
+        $this->assertNull(DotEnv::get('VARIABLE_NULL'));
+        $this->assertEmpty(DotEnv::get('VARIABLE_NONE'));
     }
 }
