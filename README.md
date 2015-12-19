@@ -79,13 +79,19 @@ $dotenv->required([
 
 If any of the required variables does not exist in any of the `.env.*`files - system will throw a `RuntimeException`.
 
-You can use a static `get` method on the `DotEnv` object to retrieve the value stored in a given environment variable.
+You can use a static `get()` method on the `DotEnv` object to retrieve the value stored in a given environment variable.
 
 ```
 DotEnv::get('DB_HOST');
 ```
 
 When you associate the string `true`, `false` with the variables within your `.env` file, they will automatically be converted to boolean `true` / `false` when using `DotEnv::get`.
-Same applies to `null` variable, which will return `null`.
+The same applies to the variable with `null` string, which will return `null` value.
 
 If you specify a variable without any value associated (`MY_VARIABLE=`) - it will return an empty string `''`.
+
+You can provide a second argument to the `get()` method, which will be returned if variable was not found.
+
+```
+DotEnv::get('DB_HOST', 'localhost');
+```
