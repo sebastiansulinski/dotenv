@@ -85,7 +85,7 @@ You can use a static `get` method on the `DotEnv` object to retrieve the value s
 DotEnv::get('DB_HOST');
 ```
 
-When you associate the string `true`, `false` with the variables within your .env file, they will be automatically converted to boolean when using `DotEnv::get`.
+When you associate the string `true`, `false` with the variables within your `.env` file, they will automatically be converted to boolean `true` / `false` when using `DotEnv::get`.
 Same applies to `null` variable, which will return `null`.
 
 If you specify a variable without any value associated (`MY_VARIABLE=`) - it will return an empty string `''`.
