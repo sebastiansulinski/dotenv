@@ -174,4 +174,17 @@ class DotEnvTest extends BaseCase
         $this->assertNull(DotEnv::get('VARIABLE_NULL'));
         $this->assertEmpty(DotEnv::get('VARIABLE_NONE'));
     }
+
+    /**
+     * @test
+     */
+    public function returns_defaul_if_non_existent()
+    {
+        $dotenv = new DotEnv([
+            $this->pathname('.env.bool_null')
+        ]);
+        $dotenv->load();
+
+        $this->assertSame('Test', DotEnv::get('NON_EXISTENT', 'Test'));
+    }
 }
