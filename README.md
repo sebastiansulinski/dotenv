@@ -58,7 +58,7 @@ $dotenv = new DotEnv(__DIR__);
 $dotenv->load();
 
 // either a single variable
-$dotenv->require('DB_HOST');
+$dotenv->required('DB_HOST');
 ```
 
 ```
@@ -69,7 +69,7 @@ $dotenv = new DotEnv(__DIR__);
 $dotenv->load();
 
 // or an array of variables
-$dotenv->require([
+$dotenv->required([
     'DB_HOST',
     'DB_NAME',
     'DB_USER',
