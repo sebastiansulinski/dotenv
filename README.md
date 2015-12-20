@@ -108,9 +108,16 @@ The same applies to the variable with `null` string, which will return `null` va
 If you specify a variable without any value associated (`MY_VARIABLE=`) - it will return an empty string `''`.
 
 You can provide a second argument to the `get()` method, which will be returned if variable was not found.
+The default value can be of a `scalar` or a `Closure` type.
 
 ```
 DotEnv::get('DB_HOST', 'localhost');
+
+DotEnv::get('DB_HOST', function() {
+
+    return DotEnv::get('ENVIRONMENT') == 'live' ? 'localhost' : 127.0.0.1;
+
+});
 ```
 
 ### Variable referencing
