@@ -6,7 +6,18 @@ This package is a work that derived form the package published by [vlucas/phpdot
 
 ## Usage instructions
 
-To use the plugin you'll need to have at least `.env` file that you can load when the instantiating the `SSD\DotEnv\DotEnv` object.
+To use the plugin you'll need to have at least one `.env` file i.e.
+
+```
+// .env
+
+DB_HOST=localhost
+DB_NAME=test
+DB_USER=user
+DB_PASS=password
+```
+
+You load all your `.env` files when instantiating the `SSD\DotEnv\DotEnv` object.
 
 ```
 require "vendor/autoload.php";
@@ -28,6 +39,8 @@ $dotenv = new DotEnv([
 ]);
 ```
 
+### Loading variables
+
 To load process the variables there are two methods `load()` and `overload()`.
 
 The `load()` method will only set the variables that do not already exist, while `overload()` will set them all - overwriting any existing ones.
@@ -47,6 +60,8 @@ $dotenv = new DotEnv(__DIR__);
 // overwriting any duplicates
 $dotenv->overload();
 ```
+
+### Required variables
 
 To ensure that your system has all necessary variables available you can use `required()` method, which takes either a single variable name or an array of required variables.
 
@@ -79,6 +94,8 @@ $dotenv->required([
 
 If any of the required variables does not exist in any of the `.env.*`files - system will throw a `RuntimeException`.
 
+### Obtaining value stored in the variable
+
 You can use a static `get()` method on the `DotEnv` object to retrieve the value stored in a given environment variable.
 
 ```
@@ -94,4 +111,17 @@ You can provide a second argument to the `get()` method, which will be returned 
 
 ```
 DotEnv::get('DB_HOST', 'localhost');
+```
+
+### Variable referencing
+
+If there is a variable that you'd like to inherit the value of you can use its name with the `$` sign at the beginning i.e.
+
+```
+MAIL_SMTP=true
+MAIL_USER=mail@mail.com
+MAIL_PASS=password
+MAIL_PORT=587
+
+MAIL_API_KEY=$MAIL_PASS
 ```
