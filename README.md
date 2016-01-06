@@ -122,7 +122,7 @@ DotEnv::get('DB_HOST', function() {
 
 ### Variable referencing
 
-If there is a variable that you'd like to inherit the value of you can use its name wrapped with the `${..}` sign at the beginning i.e.
+If there is a variable that you'd like to inherit the value of you can use its name wrapped within the `${..}` i.e.
 
 ```
 MAIL_SMTP=true
