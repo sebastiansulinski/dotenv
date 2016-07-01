@@ -147,7 +147,7 @@ class DotEnv
      */
     public static function has($key)
     {
-        return ! in_array(getenv($key), [false, null]);
+        return getenv($key) !== false;
     }
 
 }

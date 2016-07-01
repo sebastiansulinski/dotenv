@@ -204,6 +204,7 @@ class DotEnvTest extends BaseCase
         $this->assertTrue(DotEnv::has('VARIABLE_BOOL_TRUE'));
         $this->assertTrue(DotEnv::has('VARIABLE_BOOL_FALSE'));
         $this->assertTrue(DotEnv::has('VARIABLE_NULL'));
-        $this->assertFalse(DotEnv::has('VARIABLE_NONE'));
+        $this->assertTrue(DotEnv::has('VARIABLE_NONE'));
+        $this->assertFalse(DotEnv::has('VARIABLE_NONE_EXISTENT'));
     }
 }
