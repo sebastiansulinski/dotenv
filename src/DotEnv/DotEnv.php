@@ -145,11 +145,9 @@ class DotEnv
      * @param string $key
      * @return bool
      */
-    private static function has($key)
+    public static function has($key)
     {
-        $value = static::get($key);
-
-        return ! is_null($value);
+        return ! in_array(getenv($key), [false, null]);
     }
 
 }

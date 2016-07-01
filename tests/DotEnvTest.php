@@ -1,22 +1,11 @@
 <?php namespace SSDTest;
 
-use PHPUnit_Framework_Error;
 use RuntimeException;
 
 use SSD\DotEnv\DotEnv;
 
 class DotEnvTest extends BaseCase
 {
-    /**
-     * @test
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function constructor_throws_error_without_the_argument()
-    {
-        $dotenv = new DotEnv();
-    }
-
     /**
      * @test
      */
@@ -186,5 +175,35 @@ class DotEnvTest extends BaseCase
         $dotenv->load();
 
         $this->assertSame('Test', DotEnv::get('NON_EXISTENT', 'Test'));
+    }
+
+    /**
+     * @test
+     */
+    public function is_returns_correct_boolean()
+    {
+        $dotenv = new DotEnv([
+            $this->pathname('.env')
+        ]);
+        $dotenv->overload();
+
+        $this->assertTrue(DotEnv::is('ENVIRONMENT', 'live'));
+        $this->assertFalse(DotEnv::is('ENVIRONMENT', 'local'));
+    }
+
+    /**
+     * @test
+     */
+    public function has_returns_correct_boolean()
+    {
+        $dotenv = new DotEnv([
+            $this->pathname('.env.bool_null')
+        ]);
+        $dotenv->load();
+
+        $this->assertTrue(DotEnv::has('VARIABLE_BOOL_TRUE'));
+        $this->assertTrue(DotEnv::has('VARIABLE_BOOL_FALSE'));
+        $this->assertTrue(DotEnv::has('VARIABLE_NULL'));
+        $this->assertFalse(DotEnv::has('VARIABLE_NONE'));
     }
 }
