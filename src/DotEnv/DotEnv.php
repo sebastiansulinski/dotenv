@@ -122,4 +122,34 @@ class DotEnv
         return $value;
     }
 
+    /**
+     * Check if variable with a given key
+     * has a given value.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return bool
+     */
+    public static function is($key, $value)
+    {
+        if ( ! static::has($key)) {
+            return false;
+        }
+
+        return static::get($key) == $value;
+    }
+
+    /**
+     * Check if variable with given key is set.
+     *
+     * @param string $key
+     * @return bool
+     */
+    private static function has($key)
+    {
+        $value = static::get($key);
+
+        return ! is_null($value);
+    }
+
 }
