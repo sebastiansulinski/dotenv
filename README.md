@@ -120,6 +120,19 @@ DotEnv::get('DB_HOST', function() {
 });
 ```
 
+### Checking if exists and equals
+
+You can check if variable exists by using `has()` and whether it stores a given value by using `is()` methods.
+
+```
+DotEnv::has('ENVIRONMENT');
+// true / false
+
+DotEnv::is('ENVIRONMENT', 'live')
+// true / false
+```
+
+
 ### Variable referencing
 
 If there is a variable that you'd like to inherit the value of you can use its name wrapped within the `${..}` i.e.
