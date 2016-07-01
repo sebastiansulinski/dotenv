@@ -125,8 +125,8 @@ DotEnv::get('DB_HOST', function() {
 You can check if variable exists by using `has()` and whether it stores a given value by using `is()` methods.
 
 ```
-DotEnv::has('ENVIRONMENT');
-// true / false
+DotEnv::has('NON_EXISTENT_VARIABLE');
+// false
 
 DotEnv::is('ENVIRONMENT', 'live')
 // true / false
