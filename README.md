@@ -8,7 +8,7 @@ This package is a work that derived form the package published by [vlucas/phpdot
 
 To use the plugin you'll need to have at least one `.env` file i.e.
 
-```
+```php
 // .env
 
 DB_HOST=localhost
@@ -19,7 +19,7 @@ DB_PASS=password
 
 You load all your `.env` files when instantiating the `SSD\DotEnv\DotEnv` object.
 
-```
+```php
 require "vendor/autoload.php";
 
 use SSD\DotEnv\DotEnv;
@@ -29,7 +29,7 @@ $dotEnv = new DotEnv(__DIR__ . DIRECTORY_SEPARATOR . '.env');
 
 You can pass a single `.env` file, path to a directory with `.env.*` files or array of paths / directories
 
-```
+```php
 $dotEnv = new DotEnv(__DIR__ . DIRECTORY_SEPARATOR . '.env');
 $dotEnv = new DotEnv(__DIR__);
 $dotEnv = new DotEnv([
@@ -45,7 +45,7 @@ To load process the variables there are two methods `load()` and `overload()`.
 
 The `load()` method will only set the variables that do not already exist, while `overload()` will set them all - overwriting any existing ones.
 
-```
+```php
 $dotEnv = new DotEnv(__DIR__);
 
 // will only set variables
@@ -53,7 +53,7 @@ $dotEnv = new DotEnv(__DIR__);
 $dotEnv->load();
 ```
 
-```
+```php
 $dotEnv = new DotEnv(__DIR__);
 
 // will set all variables from the files
@@ -65,7 +65,7 @@ $dotEnv->overload();
 
 To ensure that your system has all necessary variables available you can use `required()` method, which takes either a single variable name or an array of required variables.
 
-```
+```php
 $dotEnv = new DotEnv(__DIR__);
 
 // will only set variables
@@ -76,7 +76,7 @@ $dotEnv->load();
 $dotEnv->required('DB_HOST');
 ```
 
-```
+```php
 $dotEnv = new DotEnv(__DIR__);
 
 // will only set variables
@@ -98,7 +98,7 @@ If any of the required variables does not exist in any of the `.env.*`files - sy
 
 You can use a static `get()` method on the `DotEnv` object to retrieve the value stored in a given environment variable.
 
-```
+```php
 DotEnv::get('DB_HOST');
 ```
 
@@ -110,7 +110,7 @@ If you specify a variable without any value associated (`MY_VARIABLE=`) - it wil
 You can provide a second argument to the `get()` method, which will be returned if variable was not found.
 The default value can be of a `scalar` or a `Closure` type.
 
-```
+```php
 DotEnv::get('DB_HOST', 'localhost');
 
 DotEnv::get('DB_HOST', function() {
@@ -124,7 +124,7 @@ DotEnv::get('DB_HOST', function() {
 
 You can check if variable exists by using `has()` and whether it stores a given value by using `is()` methods.
 
-```
+```php
 DotEnv::has('NON_EXISTENT_VARIABLE');
 // false
 
@@ -134,7 +134,7 @@ DotEnv::is('ENVIRONMENT', 'live')
 
 ### Setting variables
 
-```
+```php
 $dotEnv = new DotEnv(__DIR__);
 $dotEnv->load();
 $dotEnv->set('CUSTOM_VARIABLE', 123);
@@ -145,7 +145,7 @@ $dotEnv->required('CUSTOM_VARIABLE');
 
 If there is a variable that you'd like to inherit the value of you can use its name wrapped within the `${..}` i.e.
 
-```
+```php
 MAIL_SMTP=true
 MAIL_USER=mail@mail.com
 MAIL_PASS=password
