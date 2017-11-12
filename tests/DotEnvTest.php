@@ -220,13 +220,15 @@ class DotEnvTest extends BaseCase
         ]);
         $dotEnv->load();
 
-        $this->assertFalse(DotEnv::has('CUSTOM_VARIABLE'));
 
+        $this->assertFalse(DotEnv::has('CUSTOM_VARIABLE'));
 
         $dotEnv->set('CUSTOM_VARIABLE', 123);
 
         $this->assertTrue(DotEnv::has('CUSTOM_VARIABLE'));
         $this->assertTrue(DotEnv::is('CUSTOM_VARIABLE', 123));
         $this->assertEquals(123, DotEnv::get('CUSTOM_VARIABLE'));
+
+        $dotEnv->required('CUSTOM_VARIABLE');
     }
 }

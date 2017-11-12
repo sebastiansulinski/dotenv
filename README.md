@@ -24,15 +24,15 @@ require "vendor/autoload.php";
 
 use SSD\DotEnv\DotEnv;
 
-$dotenv = new DotEnv(__DIR__ . DIRECTORY_SEPARATOR . '.env');
+$dotEnv = new DotEnv(__DIR__ . DIRECTORY_SEPARATOR . '.env');
 ```
 
 You can pass a single `.env` file, path to a directory with `.env.*` files or array of paths / directories
 
 ```
-$dotenv = new DotEnv(__DIR__ . DIRECTORY_SEPARATOR . '.env');
-$dotenv = new DotEnv(__DIR__);
-$dotenv = new DotEnv([
+$dotEnv = new DotEnv(__DIR__ . DIRECTORY_SEPARATOR . '.env');
+$dotEnv = new DotEnv(__DIR__);
+$dotEnv = new DotEnv([
     __DIR__
     'another/path',
     'another/file/.env'
@@ -46,19 +46,19 @@ To load process the variables there are two methods `load()` and `overload()`.
 The `load()` method will only set the variables that do not already exist, while `overload()` will set them all - overwriting any existing ones.
 
 ```
-$dotenv = new DotEnv(__DIR__);
+$dotEnv = new DotEnv(__DIR__);
 
 // will only set variables
 // that are not already set
-$dotenv->load();
+$dotEnv->load();
 ```
 
 ```
-$dotenv = new DotEnv(__DIR__);
+$dotEnv = new DotEnv(__DIR__);
 
 // will set all variables from the files
 // overwriting any duplicates
-$dotenv->overload();
+$dotEnv->overload();
 ```
 
 ### Required variables
@@ -66,25 +66,25 @@ $dotenv->overload();
 To ensure that your system has all necessary variables available you can use `required()` method, which takes either a single variable name or an array of required variables.
 
 ```
-$dotenv = new DotEnv(__DIR__);
+$dotEnv = new DotEnv(__DIR__);
 
 // will only set variables
 // that are not already set
-$dotenv->load();
+$dotEnv->load();
 
 // either a single variable
-$dotenv->required('DB_HOST');
+$dotEnv->required('DB_HOST');
 ```
 
 ```
-$dotenv = new DotEnv(__DIR__);
+$dotEnv = new DotEnv(__DIR__);
 
 // will only set variables
 // that are not already set
-$dotenv->load();
+$dotEnv->load();
 
 // or an array of variables
-$dotenv->required([
+$dotEnv->required([
     'DB_HOST',
     'DB_NAME',
     'DB_USER',
@@ -132,6 +132,14 @@ DotEnv::is('ENVIRONMENT', 'live')
 // true / false
 ```
 
+### Setting variables
+
+```
+$dotEnv = new DotEnv(__DIR__);
+$dotEnv->load();
+$dotEnv->set('CUSTOM_VARIABLE', 123);
+$dotEnv->required('CUSTOM_VARIABLE');
+```
 
 ### Variable referencing
 
