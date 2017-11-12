@@ -1,8 +1,10 @@
 # DotEnv
 
-Enables you to load environment variables from multiple .env files at multiple locations
+Package which enables to load environment variables from multiple .env files at multiple locations
 
-This package is a work that derived form the package published by [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) and it adds functionality to handle multiple `.env` files.
+This package is a work that derived form the package published by [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) with some additional functionality such as handling multiple `.env` files and setting up variables using instance of the class.
+
+[![Build Status](https://travis-ci.org/sebastiansulinski/dotenv.svg?branch=master)](https://travis-ci.org/sebastiansulinski/dotenv)
 
 ## Usage instructions
 
