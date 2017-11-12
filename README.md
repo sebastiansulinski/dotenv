@@ -6,6 +6,10 @@ This package is a work that derived form the package published by [vlucas/phpdot
 
 [![Build Status](https://travis-ci.org/sebastiansulinski/dotenv.svg?branch=master)](https://travis-ci.org/sebastiansulinski/dotenv)
 
+## Versions
+
+Latest version `v1.2.0` requires PHP 7.1+. If you require support for older versions of PHP, please use version `v1.1.1`.
+
 ## Usage instructions
 
 To use the plugin you'll need to have at least one `.env` file i.e.
