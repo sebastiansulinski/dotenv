@@ -1,4 +1,6 @@
-<?php namespace SSDTest;
+<?php
+
+namespace SSDTest;
 
 use RuntimeException;
 
@@ -11,8 +13,8 @@ class DotEnvTest extends BaseCase
      */
     public function loads_single_file()
     {
-        $dotenv = new DotEnv($this->pathname('.env'));
-        $dotenv->load();
+        $dotEnv = new DotEnv($this->pathname('.env'));
+        $dotEnv->load();
 
         $this->assertEquals(DotEnv::get('ENVIRONMENT'), 'live');
     }
@@ -22,8 +24,8 @@ class DotEnvTest extends BaseCase
      */
     public function loads_multiple_files_from_directory_path()
     {
-        $dotenv = new DotEnv($this->path);
-        $dotenv->load();
+        $dotEnv = new DotEnv($this->path);
+        $dotEnv->load();
 
         $this->assertEquals(DotEnv::get('ENVIRONMENT'), 'live');
         $this->assertEquals(DotEnv::get('DB_HOST'), 'localhost');
@@ -37,12 +39,12 @@ class DotEnvTest extends BaseCase
      */
     public function loads_multiple_files_as_array()
     {
-        $dotenv = new DotEnv([
+        $dotEnv = new DotEnv([
             $this->pathname('.env'),
             $this->pathname('.env.database'),
             $this->pathname('.env.nested')
         ]);
-        $dotenv->load();
+        $dotEnv->load();
 
         $this->assertEquals(DotEnv::get('ENVIRONMENT'), 'live');
         $this->assertEquals(DotEnv::get('DB_HOST'), 'localhost');
@@ -56,8 +58,8 @@ class DotEnvTest extends BaseCase
      */
     public function returns_null_for_non_existing_variable()
     {
-        $dotenv = new DotEnv($this->pathname('.env'));
-        $dotenv->load();
+        $dotEnv = new DotEnv($this->pathname('.env'));
+        $dotEnv->load();
 
         $this->assertNull(DotEnv::get('DB_HOST'));
     }
@@ -67,8 +69,8 @@ class DotEnvTest extends BaseCase
      */
     public function returns_nested_variable()
     {
-        $dotenv = new DotEnv($this->pathname('.env.nested'));
-        $dotenv->load();
+        $dotEnv = new DotEnv($this->pathname('.env.nested'));
+        $dotEnv->load();
 
         $this->assertSame(DotEnv::get('MAIL_PASS'), DotEnv::get('MAIL_API_KEY'));
     }
@@ -78,11 +80,11 @@ class DotEnvTest extends BaseCase
      */
     public function overwrites_previously_declared_variables()
     {
-        $dotenv = new DotEnv([
+        $dotEnv = new DotEnv([
             $this->pathname('.env'),
             $this->overwrite_pathname('.env')
         ]);
-        $dotenv->overload();
+        $dotEnv->overload();
 
         $this->assertEquals(DotEnv::get('ENVIRONMENT'), 'production');
     }
@@ -92,10 +94,10 @@ class DotEnvTest extends BaseCase
      */
     public function strips_double_quotes_from_beginning_and_end()
     {
-        $dotenv = new DotEnv([
+        $dotEnv = new DotEnv([
             $this->quotes_pathname('.env')
         ]);
-        $dotenv->overload();
+        $dotEnv->overload();
 
         $this->assertEquals(DotEnv::get('DOUBLE_QUOTE_BOTH'), '$somestring');
         $this->assertEquals(DotEnv::get('DOUBLE_QUOTE_LEFT'), '"$somestring');
@@ -107,10 +109,10 @@ class DotEnvTest extends BaseCase
      */
     public function strips_single_quotes_from_beginning_and_end()
     {
-        $dotenv = new DotEnv([
+        $dotEnv = new DotEnv([
             $this->quotes_pathname('.env')
         ]);
-        $dotenv->overload();
+        $dotEnv->overload();
 
         $this->assertEquals(DotEnv::get('SINGLE_QUOTE_BOTH'), '$asdflkj%&*');
         $this->assertEquals(DotEnv::get('SINGLE_QUOTE_LEFT'), "'\$asdflkj%&*");
@@ -124,11 +126,11 @@ class DotEnvTest extends BaseCase
      */
     public function required_method_throws_exception_without_single_valid_variable()
     {
-        $dotenv = new DotEnv([
+        $dotEnv = new DotEnv([
             $this->quotes_pathname('.env')
         ]);
-        $dotenv->load();
-        $dotenv->required('EMPTY_VARIABLE');
+        $dotEnv->load();
+        $dotEnv->required('EMPTY_VARIABLE');
     }
 
     /**
@@ -138,11 +140,11 @@ class DotEnvTest extends BaseCase
      */
     public function required_method_throws_exception_without_array_of_valid_variables()
     {
-        $dotenv = new DotEnv([
+        $dotEnv = new DotEnv([
             $this->quotes_pathname('.env')
         ]);
-        $dotenv->load();
-        $dotenv->required([
+        $dotEnv->load();
+        $dotEnv->required([
             'EMPTY_VARIABLE',
             'ANOTHER_EMPTY_VARIABLE'
         ]);
@@ -153,10 +155,10 @@ class DotEnvTest extends BaseCase
      */
     public function returns_boolean_null_and_empty()
     {
-        $dotenv = new DotEnv([
+        $dotEnv = new DotEnv([
             $this->pathname('.env.bool_null')
         ]);
-        $dotenv->load();
+        $dotEnv->load();
 
         $this->assertTrue(DotEnv::get('VARIABLE_BOOL_TRUE'));
         $this->assertFalse(DotEnv::get('VARIABLE_BOOL_FALSE'));
@@ -167,12 +169,12 @@ class DotEnvTest extends BaseCase
     /**
      * @test
      */
-    public function returns_defaul_if_non_existent()
+    public function returns_default_if_non_existent()
     {
-        $dotenv = new DotEnv([
+        $dotEnv = new DotEnv([
             $this->pathname('.env.bool_null')
         ]);
-        $dotenv->load();
+        $dotEnv->load();
 
         $this->assertSame('Test', DotEnv::get('NON_EXISTENT', 'Test'));
     }
@@ -182,10 +184,10 @@ class DotEnvTest extends BaseCase
      */
     public function is_returns_correct_boolean()
     {
-        $dotenv = new DotEnv([
+        $dotEnv = new DotEnv([
             $this->pathname('.env')
         ]);
-        $dotenv->overload();
+        $dotEnv->overload();
 
         $this->assertTrue(DotEnv::is('ENVIRONMENT', 'live'));
         $this->assertFalse(DotEnv::is('ENVIRONMENT', 'local'));
@@ -196,15 +198,35 @@ class DotEnvTest extends BaseCase
      */
     public function has_returns_correct_boolean()
     {
-        $dotenv = new DotEnv([
+        $dotEnv = new DotEnv([
             $this->pathname('.env.bool_null')
         ]);
-        $dotenv->load();
+        $dotEnv->load();
 
         $this->assertTrue(DotEnv::has('VARIABLE_BOOL_TRUE'));
         $this->assertTrue(DotEnv::has('VARIABLE_BOOL_FALSE'));
         $this->assertTrue(DotEnv::has('VARIABLE_NULL'));
         $this->assertTrue(DotEnv::has('VARIABLE_NONE'));
         $this->assertFalse(DotEnv::has('VARIABLE_NONE_EXISTENT'));
+    }
+
+    /**
+     * @test
+     */
+    public function sets_new_variable()
+    {
+        $dotEnv = new DotEnv([
+            $this->pathname('.env.bool_null')
+        ]);
+        $dotEnv->load();
+
+        $this->assertFalse(DotEnv::has('CUSTOM_VARIABLE'));
+
+
+        $dotEnv->set('CUSTOM_VARIABLE', 123);
+
+        $this->assertTrue(DotEnv::has('CUSTOM_VARIABLE'));
+        $this->assertTrue(DotEnv::is('CUSTOM_VARIABLE', 123));
+        $this->assertEquals(123, DotEnv::get('CUSTOM_VARIABLE'));
     }
 }

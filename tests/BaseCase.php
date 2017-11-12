@@ -1,16 +1,23 @@
-<?php namespace SSDTest;
+<?php
 
-use PHPUnit_Framework_TestCase;
+namespace SSDTest;
 
-abstract class BaseCase extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+abstract class BaseCase extends TestCase
 {
     /**
      * Absolute path to the files directory.
      *
      * @var string
      */
-    protected $path = __DIR__ . DIRECTORY_SEPARATOR . 'files';
+    protected $path = __DIR__.DIRECTORY_SEPARATOR.'files';
 
+    /**
+     * Test variables.
+     *
+     * @var array
+     */
     protected $variables = [
         'ENVIRONMENT',
         'DB_HOST',
@@ -33,34 +40,34 @@ abstract class BaseCase extends PHPUnit_Framework_TestCase
     /**
      * Absolute path to the file within files directory.
      *
-     * @param $file
+     * @param  string $file
      * @return string
      */
-    protected function pathname($file)
+    protected function pathname(string $file): string
     {
-        return $this->path . DIRECTORY_SEPARATOR . $file;
+        return $this->path.DIRECTORY_SEPARATOR.$file;
     }
 
     /**
      * Absolute path to the file within files/overwrite directory.
      *
-     * @param $file
+     * @param  string $file
      * @return string
      */
-    protected function overwrite_pathname($file)
+    protected function overwrite_pathname(string $file): string
     {
-        return $this->path . DIRECTORY_SEPARATOR . 'overwrite' . DIRECTORY_SEPARATOR . $file;
+        return $this->path.DIRECTORY_SEPARATOR.'overwrite'.DIRECTORY_SEPARATOR.$file;
     }
 
     /**
      * Absolute path to the file within files/quotes directory.
      *
-     * @param $file
+     * @param  string $file
      * @return string
      */
-    protected function quotes_pathname($file)
+    protected function quotes_pathname(string $file): string
     {
-        return $this->path . DIRECTORY_SEPARATOR . 'quotes' . DIRECTORY_SEPARATOR . $file;
+        return $this->path.DIRECTORY_SEPARATOR.'quotes'.DIRECTORY_SEPARATOR.$file;
     }
 
     /**
@@ -68,14 +75,13 @@ abstract class BaseCase extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
-        foreach($this->variables as $variable) {
+        foreach ($this->variables as $variable) {
 
             putenv($variable);
             unset($_ENV[$variable]);
             unset($_SERVER[$variable]);
-
         }
     }
 }

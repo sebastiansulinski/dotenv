@@ -1,4 +1,6 @@
-<?php namespace SSD\DotEnv;
+<?php
+
+namespace SSD\DotEnv;
 
 use DirectoryIterator;
 use InvalidArgumentException;
@@ -18,11 +20,13 @@ class Loader
     /**
      * @var array
      */
-    private $lines = [ ];
+    private $lines = [];
 
     /**
-     * @param string|array $files
-     * @param bool|false $immutable
+     * Loader constructor.
+     *
+     * @param  string|array $files
+     * @param  bool|false $immutable
      */
     public function __construct($files, $immutable = false)
     {
@@ -35,7 +39,7 @@ class Loader
      *
      * @return void
      */
-    public function load()
+    public function load(): void
     {
         $this->getContent();
 
@@ -47,9 +51,9 @@ class Loader
      *
      * @return void
      */
-    private function getContent()
+    private function getContent(): void
     {
-        foreach ( (array) $this->files as $item ) {
+        foreach ((array)$this->files as $item) {
 
             if (is_file($item)) {
                 $this->readFileContent($item);
@@ -58,7 +62,6 @@ class Loader
             if (is_dir($item)) {
                 $this->readDirectoryContent($item);
             }
-
         }
     }
 
@@ -66,10 +69,10 @@ class Loader
      * Read content of a file
      * and add its lines to the collection.
      *
-     * @param string $file
+     * @param  string $file
      * @return void
      */
-    private function readFileContent($file)
+    private function readFileContent(string $file): void
     {
         $autodetect = ini_get('auto_detect_line_endings');
         ini_set('auto_detect_line_endings', '1');
@@ -84,21 +87,18 @@ class Loader
      * and add each qualifying file's
      * content lines to the collection.
      *
-     * @param string $directory
+     * @param  string $directory
      * @return void
      */
-    private function readDirectoryContent($directory)
+    private function readDirectoryContent(string $directory): void
     {
         $items = new DirectoryIterator($directory);
 
-        foreach($items as $item) {
+        foreach ($items as $item) {
 
             if ($item->isFile() && $this->isFile($item->getFilename())) {
-
                 $this->readFileContent($item->getPathname());
-
             }
-
         }
     }
 
@@ -106,10 +106,10 @@ class Loader
      * Check if the given file name
      * qualifies as the environment file.
      *
-     * @param $name
+     * @param  string $name
      * @return bool
      */
-    private function isFile($name)
+    private function isFile(string $name): bool
     {
         return substr($name, 0, 4) === '.env';
     }
@@ -120,7 +120,7 @@ class Loader
      *
      * @return void
      */
-    private function processEntries()
+    private function processEntries(): void
     {
         if (empty($this->lines)) {
             return;
@@ -128,22 +128,21 @@ class Loader
 
         foreach ($this->lines as $line) {
 
-            if ($this->isLineComment($line) || ! $this->isLineSetter($line)) {
+            if ($this->isLineComment($line) || !$this->isLineSetter($line)) {
                 continue;
             }
 
             $this->setVariable($line);
-
         }
     }
 
     /**
      * Determine if the given line contains a "#" symbol at the beginning.
      *
-     * @param string $line
+     * @param  string $line
      * @return bool
      */
-    private function isLineComment($line)
+    private function isLineComment(string $line): bool
     {
         return strpos(trim($line), '#') === 0;
     }
@@ -151,32 +150,29 @@ class Loader
     /**
      * Determine if the given line contains an "=" symbol.
      *
-     * @param string $line
+     * @param  string $line
      * @return bool
      */
-    protected function isLineSetter($line)
+    protected function isLineSetter(string $line): bool
     {
         return strpos($line, '=') !== false;
     }
 
     /**
-     * Set environment variable.
-     *
-     * Using:
-     * - putenv
-     * - $_ENV
-     * - $_SERVER
+     * Set environment variable
+     * using: putenv, $_ENV and $_SERVER.
      *
      * Value is stripped of single and double quotes.
      *
-     * @param string $name
-     * @param null $value
+     * @param  string $name
+     * @param  mixed|null $value
+     * @return void
      */
-    public function setVariable($name, $value = null)
+    public function setVariable(string $name, $value = null): void
     {
         list($name, $value) = $this->normaliseVariable($name, $value);
 
-        if ($this->immutable && ! is_null($this->getVariable($name))) {
+        if ($this->immutable && !is_null($this->getVariable($name))) {
             return;
         }
 
@@ -192,18 +188,19 @@ class Loader
      * - Strips the quotes from name and value
      * - Resolves nested variables
      *
-     * @param string $name
-     * @param mixed $value
+     * @param  string $name
+     * @param  mixed $value
      * @return array
      */
-    private function normaliseVariable($name, $value)
+    private function normaliseVariable(string $name, $value): array
     {
         list($name, $value) = $this->splitStringIntoParts($name, $value);
         list($name, $value) = $this->sanitiseVariableName($name, $value);
         list($name, $value) = $this->sanitiseVariableValue($name, $value);
+
         $value = $this->resolveNestedVariables($value);
 
-        return [ $name, $value ];
+        return [$name, $value];
     }
 
     /**
@@ -213,59 +210,59 @@ class Loader
      * we split it into "$name" and "$value"
      * disregarding "$value" argument of the method.
      *
-     * @param string $name
-     * @param mixed $value
+     * @param  string $name
+     * @param  mixed $value
      * @return array
      */
-    private function splitStringIntoParts($name, $value)
+    private function splitStringIntoParts(string $name, $value): array
     {
         if (strpos($name, '=') !== false) {
             list($name, $value) = array_map('trim', explode('=', $name, 2));
         }
 
-        return [ $name, $value ];
+        return [$name, $value];
     }
 
     /**
      * Strip quotes and the optional leading "export"
      * from the name.
      *
-     * @param string $name
-     * @param mixed $value
+     * @param  string $name
+     * @param  mixed $value
      * @return array
      */
-    private function sanitiseVariableName($name, $value)
+    private function sanitiseVariableName(string $name, $value): array
     {
-        $name = trim(str_replace([ 'export ', '\'', '"' ], '', $name));
+        $name = trim(str_replace(['export ', '\'', '"'], '', $name));
 
-        return [ $name, $value ];
+        return [$name, $value];
     }
 
     /**
      * Strip quotes from the value.
      *
-     * @param string $name
-     * @param mixed $value
+     * @param  string $name
+     * @param  mixed $value
      * @return array
      */
-    private function sanitiseVariableValue($name, $value)
+    private function sanitiseVariableValue(string $name, $value): array
     {
         $value = trim($value);
 
-        if ( ! $value) {
-            return [ $name, $value ];
+        if (!$value) {
+            return [$name, $value];
         }
 
         $value = $this->getSanitisedValue($value);
 
-        return [ $name, trim($value) ];
+        return [$name, trim($value)];
     }
 
     /**
      * Return value without the quotes.
      *
-     * @param mixed $value
-     * @return mixed|string
+     * @param  mixed $value
+     * @return mixed
      * @throws InvalidArgumentException
      */
     private function getSanitisedValue($value)
@@ -310,10 +307,10 @@ class Loader
     /**
      * Determine if the given value begins with a single or double quote.
      *
-     * @param mixed $value
+     * @param  mixed $value
      * @return bool
      */
-    private function beginsWithQuote($value)
+    private function beginsWithQuote($value): bool
     {
         return strpbrk($value[0], '"\'') !== false;
     }
@@ -324,7 +321,7 @@ class Loader
      * Look for {$varname} patterns in the variable value
      * and replace with an existing environment variable.
      *
-     * @param mixed $value
+     * @param  mixed $value
      * @return mixed
      */
     private function resolveNestedVariables($value)
@@ -342,7 +339,6 @@ class Loader
                 if (is_null($nestedVariable)) {
                     return $matchedPatterns[0];
                 }
-
                 return $nestedVariable;
             },
             $value
@@ -351,16 +347,12 @@ class Loader
 
     /**
      * Get environment variable by name
-     * from either:
+     * from either: $_ENV, $_SERVER or getenv.
      *
-     * - $_ENV
-     * - $_SERVER
-     * - getenv
-     *
-     * @param string $name
-     * @return null|string
+     * @param  string $name
+     * @return mixed
      */
-    public function getVariable($name)
+    public function getVariable(string $name)
     {
         switch (true) {
             case array_key_exists($name, $_ENV):
@@ -376,9 +368,9 @@ class Loader
     /**
      * Clear environment variable by name.
      *
-     * @param string $name
+     * @param  string $name
      */
-    public function clearVariable($name)
+    public function clearVariable(string $name)
     {
         if ($this->immutable) {
             return;

@@ -1,4 +1,6 @@
-<?php namespace SSD\DotEnv;
+<?php
+
+namespace SSD\DotEnv;
 
 use Closure;
 
@@ -10,8 +12,9 @@ class DotEnv
      * @var string|array
      */
     private $files;
+
     /**
-     * @var Loader
+     * @var \SSD\DotEnv\Loader
      */
     private $loader;
 
@@ -29,9 +32,9 @@ class DotEnv
      * Load the files and set new environment variables
      * without overwriting the existing ones.
      *
-     * @return DotEnv
+     * @return \SSD\DotEnv\DotEnv
      */
-    public function load()
+    public function load(): self
     {
         $this->loader = new Loader($this->files, true);
         $this->loader->load();
@@ -43,9 +46,9 @@ class DotEnv
      * Load the files and set new environment variables
      * overwriting the existing ones.
      *
-     * @return DotEnv
+     * @return \SSD\DotEnv\DotEnv
      */
-    public function overload()
+    public function overload(): self
     {
         $this->loader = new Loader($this->files);
         $this->loader->load();
@@ -56,24 +59,24 @@ class DotEnv
     /**
      * Validate entries for the existence of the given variables.
      *
-     * @param string|array $variable
-     * @return Validator
+     * @param  string|array $variable
+     * @return \SSD\DotEnv\Validator
      */
-    public function required($variable)
+    public function required($variable): Validator
     {
-        return new Validator((array) $variable, $this->loader);
+        return new Validator((array)$variable, $this->loader);
     }
 
     /**
      * Pull value associated with the environment variable.
      *
-     * @param $key
-     * @param null $default
-     * @return bool|null|mixed
+     * @param  string $name
+     * @param  mixed|null $default
+     * @return mixed
      */
-    public static function get($key, $default = null)
+    public static function get(string $name, $default = null)
     {
-        $value = getenv($key);
+        $value = getenv($name);
 
         if ($value === false) {
             return static::value($default);
@@ -99,7 +102,7 @@ class DotEnv
     /**
      * Get value.
      *
-     * @param $value
+     * @param  mixed $value
      * @return mixed
      */
     private static function value($value)
@@ -110,8 +113,8 @@ class DotEnv
     /**
      * Strip double quotes if found on both sides of the string.
      *
-     * @param $value
-     * @return string
+     * @param  mixed $value
+     * @return mixed
      */
     private static function sanitise($value)
     {
@@ -126,28 +129,40 @@ class DotEnv
      * Check if variable with a given key
      * has a given value.
      *
-     * @param string $key
-     * @param mixed $value
+     * @param  string $name
+     * @param  mixed $value
      * @return bool
      */
-    public static function is($key, $value)
+    public static function is(string $name, $value): bool
     {
-        if ( ! static::has($key)) {
+        if (!static::has($name)) {
             return false;
         }
 
-        return static::get($key) == $value;
+        return static::get($name) == $value;
     }
 
     /**
      * Check if variable with given key is set.
      *
-     * @param string $key
+     * @param  string $name
      * @return bool
      */
-    public static function has($key)
+    public static function has(string $name): bool
     {
-        return getenv($key) !== false;
+        return getenv($name) !== false;
+    }
+
+    /**
+     * Set variable.
+     *
+     * @param  string $name
+     * @param  mixed $value
+     * @return void
+     */
+    public function set(string $name, $value): void
+    {
+        $this->loader->setVariable($name, $value);
     }
 
 }
