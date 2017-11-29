@@ -57,6 +57,19 @@ class DotEnv
     }
 
     /**
+     * Fetch variables as array without
+     * setting environment variables.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $this->loader = new Loader($this->files);
+
+        return $this->loader->toArray();
+    }
+
+    /**
      * Validate entries for the existence of the given variables.
      *
      * @param  string|array $variable
@@ -164,5 +177,4 @@ class DotEnv
     {
         $this->loader->setVariable($name, $value);
     }
-
 }

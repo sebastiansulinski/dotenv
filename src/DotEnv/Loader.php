@@ -23,6 +23,16 @@ class Loader
     private $lines = [];
 
     /**
+     * @var bool
+     */
+    private $setter = true;
+
+    /**
+     * @var array
+     */
+    private $attributes = [];
+
+    /**
      * Loader constructor.
      *
      * @param  string|array $files
@@ -35,12 +45,31 @@ class Loader
     }
 
     /**
+     * Load the files and return all variables as array
+     * without setting environment variables.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $this->setter = false;
+
+        $this->getContent();
+
+        $this->processEntries();
+
+        return $this->attributes;
+    }
+
+    /**
      * Load files and set variables.
      *
      * @return void
      */
     public function load(): void
     {
+        $this->setter = true;
+
         $this->getContent();
 
         $this->processEntries();
@@ -165,14 +194,16 @@ class Loader
      * Value is stripped of single and double quotes.
      *
      * @param  string $name
-     * @param  mixed|null $value
+     * @param  mixed $value
      * @return void
      */
     public function setVariable(string $name, $value = null): void
     {
-        list($name, $value) = $this->normaliseVariable($name, $value);
+        [$name, $value] = $this->normaliseVariable($name, $value);
 
-        if ($this->immutable && !is_null($this->getVariable($name))) {
+        $this->attributes[$name] = $value;
+
+        if (($this->immutable && !is_null($this->getVariable($name))) || !$this->setter) {
             return;
         }
 
@@ -194,9 +225,11 @@ class Loader
      */
     private function normaliseVariable(string $name, $value): array
     {
-        list($name, $value) = $this->splitStringIntoParts($name, $value);
-        list($name, $value) = $this->sanitiseVariableName($name, $value);
-        list($name, $value) = $this->sanitiseVariableValue($name, $value);
+        [$name, $value] = $this->sanitiseVariableValue(
+            ...$this->sanitiseVariableName(
+            ...$this->splitStringIntoParts($name, $value)
+        )
+        );
 
         $value = $this->resolveNestedVariables($value);
 
@@ -217,7 +250,7 @@ class Loader
     private function splitStringIntoParts(string $name, $value): array
     {
         if (strpos($name, '=') !== false) {
-            list($name, $value) = array_map('trim', explode('=', $name, 2));
+            [$name, $value] = array_map('trim', explode('=', $name, 2));
         }
 
         return [$name, $value];
@@ -339,6 +372,7 @@ class Loader
                 if (is_null($nestedVariable)) {
                     return $matchedPatterns[0];
                 }
+
                 return $nestedVariable;
             },
             $value
@@ -361,6 +395,7 @@ class Loader
                 return $_SERVER[$name];
             default:
                 $value = getenv($name);
+
                 return $value === false ? null : $value;
         }
     }
