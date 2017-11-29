@@ -9,7 +9,7 @@ class DotEnv
     /**
      * Collection of files to process.
      *
-     * @var string|array
+     * @var array
      */
     private $files;
 
@@ -21,9 +21,9 @@ class DotEnv
     /**
      * DotEnv constructor.
      *
-     * @param string|array $files
+     * @param array $files
      */
-    public function __construct($files)
+    public function __construct(...$files)
     {
         $this->files = $files;
     }
@@ -65,16 +65,9 @@ class DotEnv
      */
     public function toArray(string $loadingMethod = null): array
     {
-        if (in_array($loadingMethod, ['load', 'overload'])) {
-
-            $this->loader = new Loader($this->files, $loadingMethod === 'load');
-
-            return $this->loader->toArray(true);
-        }
-
         $this->loader = new Loader($this->files);
 
-        return $this->loader->toArray();
+        return $this->loader->toArray($loadingMethod);
     }
 
     /**

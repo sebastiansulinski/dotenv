@@ -35,10 +35,10 @@ class Loader
     /**
      * Loader constructor.
      *
-     * @param  string|array $files
+     * @param  array $files
      * @param  bool|false $immutable
      */
-    public function __construct($files, $immutable = false)
+    public function __construct(array $files, $immutable = false)
     {
         $this->files = $files;
         $this->immutable = $immutable;
@@ -48,13 +48,23 @@ class Loader
      * Load the files and return all variables as array
      * without setting environment variables.
      *
-     * @param  bool $setVariables
+     * @param  string|null $loadingMethod
      * @return array
      */
-    public function toArray(bool $setVariables = false): array
+    public function toArray(string $loadingMethod = null): array
     {
-        $this->setter = $setVariables;
+        if (in_array($loadingMethod, ['load', 'overload'])) {
 
+            $this->immutable = $loadingMethod === 'load';
+
+            $this->setter = true;
+
+        } else {
+
+            $this->setter = false;
+
+        }
+        
         $this->getContent();
 
         $this->processEntries();
@@ -83,7 +93,7 @@ class Loader
      */
     private function getContent(): void
     {
-        foreach ((array)$this->files as $item) {
+        foreach ($this->files as $item) {
 
             if (is_file($item)) {
                 $this->readFileContent($item);
@@ -204,13 +214,18 @@ class Loader
 
         $this->attributes[$name] = $value;
 
-        if (($this->immutable && !is_null($this->getVariable($name))) || !$this->setter) {
+        if (!$this->setter || ($this->immutable && !is_null($this->getVariable($name)))) {
             return;
         }
 
         putenv("{$name}={$value}");
         $_ENV[$name] = $value;
         $_SERVER[$name] = $value;
+    }
+
+    public function destroyVariable()
+    {
+        
     }
 
     /**
@@ -228,8 +243,8 @@ class Loader
     {
         [$name, $value] = $this->sanitiseVariableValue(
             ...$this->sanitiseVariableName(
-            ...$this->splitStringIntoParts($name, $value)
-        )
+                ...$this->splitStringIntoParts($name, $value)
+            )
         );
 
         $value = $this->resolveNestedVariables($value);

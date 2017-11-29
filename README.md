@@ -6,10 +6,6 @@ This package is a work that derived form the package published by [vlucas/phpdot
 
 [![Build Status](https://travis-ci.org/sebastiansulinski/dotenv.svg?branch=master)](https://travis-ci.org/sebastiansulinski/dotenv)
 
-## Versions
-
-As of version `v1.2.0` package requires PHP 7.1+. If you require support for older versions of PHP, please use version `v1.1.1`.
-
 ## Usage instructions
 
 To use the plugin you'll need to have at least one `.env` file i.e.
@@ -33,16 +29,16 @@ use SSD\DotEnv\DotEnv;
 $dotEnv = new DotEnv(__DIR__ . DIRECTORY_SEPARATOR . '.env');
 ```
 
-You can pass a single `.env` file, path to a directory with `.env.*` files or array of paths / directories
+You can pass a single `.env` file, path to a directory with `.env.*` files or multiple paths / directories
 
 ```php
 $dotEnv = new DotEnv(__DIR__ . DIRECTORY_SEPARATOR . '.env');
 $dotEnv = new DotEnv(__DIR__);
-$dotEnv = new DotEnv([
+$dotEnv = new DotEnv(
     __DIR__
     'another/path',
     'another/file/.env'
-]);
+);
 ```
 
 ### Loading variables
