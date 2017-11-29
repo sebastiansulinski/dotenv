@@ -100,6 +100,37 @@ $dotEnv->required([
 
 If any of the required variables does not exist in any of the `.env.*`files - system will throw a `RuntimeException`.
 
+### Returning contents of `.env` file(s) as array
+
+Use `toArray()` method to fetch the contents of the `.env` file(s), without setting up the environment variables.
+
+```php
+$dotEnv = new DotEnv(__DIR__);
+
+// will not set environment variables
+$variables = $dotEnv->toArray();
+
+var_dump($variables);
+
+// ['DB_HOST' => '127.0.0.1', 'DB_NAME' => 'blog', ...]
+
+
+// will set environment variables using load() method
+$variables = $dotEnv->toArray('load');
+
+var_dump($variables);
+
+// ['DB_HOST' => '127.0.0.1', 'DB_NAME' => 'blog', ...]
+
+
+// will set environment variables using overload() method
+$variables = $dotEnv->toArray('overload');
+
+var_dump($variables);
+
+// ['DB_HOST' => '127.0.0.1', 'DB_NAME' => 'blog', ...]
+```
+
 ### Obtaining value stored in the variable
 
 You can use a static `get()` method on the `DotEnv` object to retrieve the value stored in a given environment variable.

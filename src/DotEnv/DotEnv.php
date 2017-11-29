@@ -60,10 +60,18 @@ class DotEnv
      * Fetch variables as array without
      * setting environment variables.
      *
+     * @param  string|null $loadingMethod
      * @return array
      */
-    public function toArray(): array
+    public function toArray(string $loadingMethod = null): array
     {
+        if (in_array($loadingMethod, ['load', 'overload'])) {
+
+            $this->loader = new Loader($this->files, $loadingMethod === 'load');
+
+            return $this->loader->toArray(true);
+        }
+
         $this->loader = new Loader($this->files);
 
         return $this->loader->toArray();

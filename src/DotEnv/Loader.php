@@ -48,11 +48,12 @@ class Loader
      * Load the files and return all variables as array
      * without setting environment variables.
      *
+     * @param  bool $setVariables
      * @return array
      */
-    public function toArray(): array
+    public function toArray(bool $setVariables = false): array
     {
-        $this->setter = false;
+        $this->setter = $setVariables;
 
         $this->getContent();
 

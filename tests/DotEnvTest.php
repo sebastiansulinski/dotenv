@@ -287,7 +287,76 @@ class DotEnvTest extends BaseCase
     /**
      * @test
      */
-    public function returns_variables_as_array_without_setting_environment_variables()
+    public function returns_variables_as_array_and_sets_environment_variables_using_load_method_as_argument()
+    {
+        $dotEnv = new DotEnv($this->pathname('.env.database'));
+
+        $this->assertEquals(
+            [
+                'DB_HOST' => 'localhost',
+                'DB_NAME' => 'test',
+                'DB_USER' => 'user',
+                'DB_PASS' => 'password'
+            ],
+            $dotEnv->toArray('load')
+        );
+
+        $this->assertTrue(DotEnv::has('DB_HOST'));
+        $this->assertTrue(DotEnv::has('DB_NAME'));
+        $this->assertTrue(DotEnv::has('DB_USER'));
+        $this->assertTrue(DotEnv::has('DB_PASS'));
+    }
+
+    /**
+     * @test
+     */
+    public function returns_variables_as_array_and_sets_environment_variables_using_overload_method_as_argument()
+    {
+        $dotEnv = new DotEnv($this->pathname('.env.database'));
+
+        $this->assertEquals(
+            [
+                'DB_HOST' => 'localhost',
+                'DB_NAME' => 'test',
+                'DB_USER' => 'user',
+                'DB_PASS' => 'password'
+            ],
+            $dotEnv->toArray('overload')
+        );
+
+        $this->assertTrue(DotEnv::has('DB_HOST'));
+        $this->assertTrue(DotEnv::has('DB_NAME'));
+        $this->assertTrue(DotEnv::has('DB_USER'));
+        $this->assertTrue(DotEnv::has('DB_PASS'));
+    }
+
+    /**
+     * @test
+     */
+    public function returns_variables_as_array_without_setting_environment_variables_when_invalid_argument_provided()
+    {
+        $dotEnv = new DotEnv($this->pathname('.env.database'));
+
+        $this->assertEquals(
+            [
+                'DB_HOST' => 'localhost',
+                'DB_NAME' => 'test',
+                'DB_USER' => 'user',
+                'DB_PASS' => 'password'
+            ],
+            $dotEnv->toArray('invalid')
+        );
+
+        $this->assertFalse(DotEnv::has('DB_HOST'));
+        $this->assertFalse(DotEnv::has('DB_NAME'));
+        $this->assertFalse(DotEnv::has('DB_USER'));
+        $this->assertFalse(DotEnv::has('DB_PASS'));
+    }
+
+    /**
+     * @test
+     */
+    public function returns_variables_as_array_without_setting_environment_variables_when_no_argument_provided()
     {
         $dotEnv = new DotEnv($this->pathname('.env.database'));
 
