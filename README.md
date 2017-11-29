@@ -102,7 +102,7 @@ If any of the required variables does not exist in any of the `.env.*`files - sy
 
 ### Returning contents of `.env` file(s) as array
 
-Use `toArray()` method to fetch the contents of the `.env` file(s), without setting up the environment variables.
+Use `toArray()` method to fetch the contents of the `.env` file(s), with or without setting up the environment variables.
 
 ```php
 $dotEnv = new DotEnv(__DIR__);
