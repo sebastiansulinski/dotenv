@@ -8,7 +8,7 @@ This package is a work that derived form the package published by [vlucas/phpdot
 
 ## Versions
 
-Latest version `v1.2.0` requires PHP 7.1+. If you require support for older versions of PHP, please use version `v1.1.1`.
+Latest `v1.2.0` requires PHP 7.1+. If you require support for older versions of PHP, please use version `v1.1.1`.
 
 ## Usage instructions
 
