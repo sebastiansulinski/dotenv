@@ -6,6 +6,14 @@ This package is a work that derived from package published by [vlucas/phpdotenv]
 
 [![Build Status](https://travis-ci.org/sebastiansulinski/dotenv.svg?branch=master)](https://travis-ci.org/sebastiansulinski/dotenv)
 
+## Installation
+
+Install package using composer
+
+```
+composer require sebastiansulinski/dotenv
+```
+
 ## Usage instructions
 
 To use the plugin you'll need to have at least one `.env` file i.e.
