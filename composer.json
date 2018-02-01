@@ -1,7 +1,7 @@
 {
     "name": "sebastiansulinski/dotenv",
     "description": "DotEnv package - work derived from vlucas/phpdotenv",
-    "license": "BSD",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sebastian Sulinski",
