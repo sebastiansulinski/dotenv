@@ -120,7 +120,7 @@ var_dump($variables);
 
 
 // will set environment variables using load() method
-$variables = $dotEnv->toArray('load');
+$variables = $dotEnv->toArray(DotEnv::LOAD);
 
 var_dump($variables);
 
@@ -128,7 +128,7 @@ var_dump($variables);
 
 
 // will set environment variables using overload() method
-$variables = $dotEnv->toArray('overload');
+$variables = $dotEnv->toArray(DotEnv::OVERLOAD);
 
 var_dump($variables);
 
