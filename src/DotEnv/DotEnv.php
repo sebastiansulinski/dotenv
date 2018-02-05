@@ -19,6 +19,16 @@ class DotEnv
     private $loader;
 
     /**
+     * @var string
+     */
+    const LOAD = 'load';
+
+    /**
+     * @var string
+     */
+    const OVERLOAD = 'overload';
+
+    /**
      * DotEnv constructor.
      *
      * @param array $files

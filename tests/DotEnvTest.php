@@ -324,7 +324,7 @@ class DotEnvTest extends BaseCase
                 'DB_USER' => 'user',
                 'DB_PASS' => 'password'
             ],
-            $dotEnv->toArray('load')
+            $dotEnv->toArray(DotEnv::LOAD)
         );
 
         $this->assertTrue(DotEnv::has('DB_HOST'));
@@ -357,7 +357,7 @@ class DotEnvTest extends BaseCase
                 'DB_USER' => 'user',
                 'DB_PASS' => 'password'
             ],
-            $dotEnv->toArray('overload')
+            $dotEnv->toArray(DotEnv::OVERLOAD)
         );
 
         $this->assertTrue(DotEnv::has('DB_HOST'));

@@ -53,9 +53,9 @@ class Loader
      */
     public function toArray(string $loadingMethod = null): array
     {
-        if (in_array($loadingMethod, ['load', 'overload'])) {
+        if (in_array($loadingMethod, [DotEnv::LOAD, DotEnv::OVERLOAD])) {
 
-            $this->immutable = $loadingMethod === 'load';
+            $this->immutable = $loadingMethod === DotEnv::LOAD;
 
             $this->setter = true;
 
