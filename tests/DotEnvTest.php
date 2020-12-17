@@ -176,32 +176,28 @@ class DotEnvTest extends BaseCase
 
     /**
      * @test
-     *
-     * @expectedException RuntimeException
      */
     public function required_method_throws_exception_without_single_valid_variable()
     {
+        $this->expectException(RuntimeException::class);
+
         $dotEnv = new DotEnv($this->quotes_pathname('.env'));
 
-
         $dotEnv->load();
-
 
         $dotEnv->required('EMPTY_VARIABLE');
     }
 
     /**
      * @test
-     *
-     * @expectedException RuntimeException
      */
     public function required_method_throws_exception_without_array_of_valid_variables()
     {
+        $this->expectException(RuntimeException::class);
+
         $dotEnv = new DotEnv($this->quotes_pathname('.env'));
 
-
         $dotEnv->load();
-
 
         $dotEnv->required([
             'EMPTY_VARIABLE',
