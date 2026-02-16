@@ -1,5 +1,8 @@
 # DotEnv
 
+> **Warning**
+> This package is deprecated and no longer maintained.
+
 Package which enables to load environment variables from multiple .env files at multiple locations
 
 This package is a work that derived from package published by [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) with some additional functionality such as handling multiple `.env` files and setting up variables using instance of the class.
